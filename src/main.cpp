@@ -1,11 +1,9 @@
-
+#include "vkey/vkey.hpp"
 #include <appdef.h>
 #include <sdk/os/debug.h>
 #include <sdk/os/input.h>
 #include <sdk/os/lcd.h>
 #include <sdk/os/string.h>
-#include <sdk/os/gui/dialog.hpp>
-#include <sdk/os/gui/longLabel.hpp>
 
 #include <string>
 #include <vector>
@@ -49,18 +47,22 @@ void get_input_equation(char* buf, int buflen) {
             int kc = ev.data.key.keyCode;
             if (kc == KEYCODE_EXE) break;
             if (kc == KEYCODE_BACKSPACE && pos > 0) { pos--; }
-            else if (kc >= KEYCODE_0 && kc <= KEYCODE_9) buf[pos++] = '0' + (kc - KEYCODE_0);
+            else if (kc == KEYCODE_7) buf[pos++] = 'H';
+            else if (kc == KEYCODE_8) buf[pos++] = 'I';
+            else if (kc == KEYCODE_9) buf[pos++] = 'J';
             else if (kc == KEYCODE_PLUS) buf[pos++] = '+';
-            else if (kc == KEYCODE_EQUALS) buf[pos++] = '=';
+            else if (kc == KEYCODE_EQUALS) buf[pos++] = 'A';
             else if (kc == KEYCODE_MINUS) buf[pos++] = '-';
             else if (kc == KEYCODE_COMMA) buf[pos++] = ',';
-            else if (kc == KEYCODE_OPEN_PARENTHESIS) buf[pos++] = '(';
+            else if (kc == KEYCODE_OPEN_PARENTHESIS) buf[pos++] = 'G';
             else if (kc == KEYCODE_CLOSE_PARENTHESIS) buf[pos++] = ')';
-            else if (kc == KEYCODE_X) buf[pos++] = 'X';
-            else if (kc == KEYCODE_Y) buf[pos++] = 'Y';
-            else if (kc == KEYCODE_Z) buf[pos++] = 'Z';
-            else if (kc == KEYCODE_DIVIDE) buf[pos++] = '/';
-            else if (kc >= 'A' && kc <= 'Z') buf[pos++] = (char)kc;
+            else if (kc == KEYCODE_X) buf[pos++] = 'B';
+            else if (kc == KEYCODE_Y) buf[pos++] = 'C';
+            else if (kc == KEYCODE_Z) buf[pos++] = 'D';
+            else if (kc == KEYCODE_DIVIDE) buf[pos++] = 'F';
+            else if (kc == KEYCODE_POWER) buf[pos++] = 'E';
+            else if (kc == KEYCODE_TIMES) buf[pos++] = 'K';
+            else if (kc == KEYCODE_SHIFT) buf[pos++] = 'L';
         }
         buf[pos] = 0;
         Debug_SetCursorPosition(1, 0);
@@ -240,11 +242,7 @@ void display_balanced(const std::vector<std::string>& lhs, const std::vector<std
         str_cat(buf, rhs[i].c_str());
         if (i < rhs.size()-1) str_cat(buf, " + ");
     }
-    GUIDialog(GUIDialog::Height25, GUIDialog::AlignTop, "Balanced Equation: ",
-        GUIDialog::KeyboardStateABC);
-    GUILongLabel* label = new GUILongLabel(10, 40, 310, 100, buf);
-    label->SetText(buf);
-    label->Refresh();
+    Debug_Printf(1,1,false, 0, "Balanced: %s", buf);
     LCD_Refresh();
     Debug_WaitKey();
 }
